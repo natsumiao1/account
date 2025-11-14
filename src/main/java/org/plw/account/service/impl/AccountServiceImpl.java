@@ -3,9 +3,12 @@ package org.plw.account.service.impl;
 import org.plw.account.dto.AccountTreeDTO;
 import org.plw.account.entity.Account;
 import org.plw.account.repository.AccountRepository;
+import org.plw.account.repository.SplitsRepository;
 import org.plw.account.service.AccountService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,15 +18,17 @@ import java.util.stream.Collectors;
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
+    private final SplitsRepository splitsRepository;
 
-    public AccountServiceImpl(AccountRepository accountRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, SplitsRepository splitsRepository) {
         this.accountRepository = accountRepository;
+        this.splitsRepository = splitsRepository;
     }
 
     @Override
     public List<AccountTreeDTO> getAccountTree() {
         List<Account> accounts = accountRepository.findAll();
-        if (accounts == null || accounts.isEmpty()) {
+        if (accounts.isEmpty()) {
             return Collections.emptyList();
         }
 
@@ -31,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
                 .collect(Collectors.toMap(
                         Account::getGuid,
                         AccountTreeDTO::new, // 使用你的构造函数
-                        (existing, replacement) -> {
+                        (existing, _) -> {
                             throw new IllegalStateException("Duplicate guid: " + existing.getGuid());
                         }
                 ));
@@ -49,6 +54,11 @@ public class AccountServiceImpl implements AccountService {
             }
         }
         return roots;
+    }
+
+    @Override
+    public BigDecimal getAccountBalanceByGuid(String accountGuid) {
+        return splitsRepository.sumValueNumByAccountGuid(accountGuid).setScale(2, RoundingMode.HALF_UP);
     }
 
     private static boolean isRoot(String parentGuid) {

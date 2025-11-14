@@ -20,6 +20,24 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/AccountTreeDTO"
+  /api/account/balance/{accountGuid}:
+    get:
+      tags:
+      - account-controller
+      operationId: getAccountBalanceByGuid
+      parameters:
+      - name: accountGuid
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
 components:
   schemas:
     AccountTreeDTO:
