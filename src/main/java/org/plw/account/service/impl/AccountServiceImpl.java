@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,7 +50,9 @@ public class AccountServiceImpl implements AccountService {
                 parent.addChild(node);
             }
         }
-        return roots;
+
+        roots.removeIf(account -> account.getAccountType().equals("Template Root"));
+        return roots.getFirst().getChildren();
     }
 
     @Override

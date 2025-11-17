@@ -26,5 +26,4 @@ public class AccountTreeDTO {
     public void addChild(AccountTreeDTO child) {
         this.children.add(child);
     }
-
 }
