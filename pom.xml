@@ -5,8 +5,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0-RC2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>4.0.0</version>
+        <relativePath/>
     </parent>
     <groupId>org.plw</groupId>
     <artifactId>account</artifactId>
@@ -61,7 +61,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-tomcat-runtime</artifactId>
+            <artifactId>spring-boot-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

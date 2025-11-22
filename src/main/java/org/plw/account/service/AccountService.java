@@ -1,5 +1,7 @@
 package org.plw.account.service;
 
+import org.plw.account.dto.AccountStatisticsRequest;
+import org.plw.account.dto.AccountStatisticsResponse;
 import org.plw.account.dto.AccountTreeDTO;
 
 import java.math.BigDecimal;
@@ -9,4 +11,6 @@ public interface AccountService {
     List<AccountTreeDTO> getAccountTree();
 
     BigDecimal getAccountBalanceByGuid(String accountGuid);
+
+    AccountStatisticsResponse getStatistics(AccountStatisticsRequest request);
 }

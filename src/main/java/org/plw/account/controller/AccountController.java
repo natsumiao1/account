@@ -1,11 +1,11 @@
 package org.plw.account.controller;
 
+import org.plw.account.dto.AccountStatisticsRequest;
+import org.plw.account.dto.AccountStatisticsResponse;
 import org.plw.account.dto.AccountTreeDTO;
 import org.plw.account.service.AccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,5 +27,12 @@ public class AccountController {
     @GetMapping("/balance/{accountGuid}")
     public BigDecimal getAccountBalanceByGuid(@PathVariable String accountGuid) {
         return accountService.getAccountBalanceByGuid(accountGuid);
+    }
+
+    @PostMapping("/statistics")
+    public ResponseEntity<AccountStatisticsResponse> getAccountStatistics(
+            @RequestBody AccountStatisticsRequest request) {
+        AccountStatisticsResponse response = accountService.getStatistics(request);
+        return ResponseEntity.ok(response);
     }
 }

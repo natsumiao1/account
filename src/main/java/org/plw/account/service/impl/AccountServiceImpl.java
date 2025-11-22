@@ -1,5 +1,8 @@
 package org.plw.account.service.impl;
 
+import org.plw.account.dto.AccountStatisticsData;
+import org.plw.account.dto.AccountStatisticsRequest;
+import org.plw.account.dto.AccountStatisticsResponse;
 import org.plw.account.dto.AccountTreeDTO;
 import org.plw.account.entity.Account;
 import org.plw.account.repository.AccountRepository;
@@ -9,7 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,6 +64,21 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public BigDecimal getAccountBalanceByGuid(String accountGuid) {
         return splitsRepository.sumValueNumByAccountGuid(accountGuid).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public AccountStatisticsResponse getStatistics(AccountStatisticsRequest request) {
+        List<Object[]> results = splitsRepository.findExpenseStatisticsByAccountsAndDateRangeNative(request.getGroupBy().getDateFormat(), request.getAccountIds(), request.getStartDate(), request.getEndDate());
+        List<AccountStatisticsData> statisticsData = results.stream()
+                .map(row -> new AccountStatisticsData(
+                        (String) row[0],
+                        ((BigDecimal) row[1]).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN)
+                ))
+                .collect(Collectors.toList());
+
+        return AccountStatisticsResponse.builder()
+                .data(statisticsData)
+                .build();
     }
 
     private static boolean isRoot(String parentGuid) {
