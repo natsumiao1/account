@@ -1,0 +1,26 @@
+meta {
+  name: 账户统计金额
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/account/statistics
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "accountIds": ["bcea623c2f434e0f93d5326365cfda8a"],
+    "startDate": "2000-01-01",
+    "endDate": "2026-01-01",
+    "groupBy": "DAY",
+    "transactionType": "EXPENSE"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,16 @@
+meta {
+  name: 账户树
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/account/tree
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
